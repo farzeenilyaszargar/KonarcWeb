@@ -42,3 +42,36 @@
   .reviews-empty h3{font-size:18px;line-height:1.4}
   .review-status{position:absolute;bottom:24px;left:40px;font-size:8px}
 }
+
+/* Three direct navigation links on every screen. */
+.header nav{margin-left:auto;gap:35px;align-items:center;position:static;display:flex;background:none;border:0;box-shadow:none;padding:0;flex-direction:row}
+.header nav a{padding:0;font-size:13px}
+.header nav .buy-nav{padding:10px 24px;background:#fff;color:#000;font-weight:600;border:1px solid #fff}
+.header nav .buy-nav:hover{background:#dce6eb;border-color:#dce6eb;color:#000}
+.hero-copy{top:44%}
+.hero-copy h1{margin-top:0}
+.hero-bottom>span{margin-right:auto}
+.community-strip{padding-bottom:0}
+.intro .intro-grid{margin-top:0}
+.feature-grid .text-link{margin-top:18px}
+.reviews-empty{margin-top:28px}
+.papers-section{min-height:40svh}
+.papers-section h2{font-size:30px}
+.papers-section p{margin-top:20px;font-size:15px}
+@media(max-width:700px){
+ .header{gap:18px}
+ .header nav{gap:20px}
+ .header nav a{font-size:12px}
+ .header nav .buy-nav{padding:8px 15px}
+ .hero-copy{top:auto}
+ .hero-copy h1{margin-top:0}
+ .reviews-empty{padding:25px 0}
+}
+@media(max-width:400px){
+ .header{padding:0 5%;gap:12px}
+ .header .brand{font-size:21px}
+ .header .brand-symbol{width:28px;margin-right:5px}
+ .header nav{gap:15px}
+ .header nav a{font-size:11px}
+ .header nav .buy-nav{padding:8px 12px}
+}

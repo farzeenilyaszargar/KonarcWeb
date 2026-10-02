@@ -21,7 +21,8 @@ npm run check
 - `dist/index.html`: full-screen black-background product photograph, 3,000+ customer community strip, reviews area, product introduction and ecosystem overview
 - `dist/buy.html`: mechanical sleeve priced at ₹8,999, quantity controls and calculated subtotal
 - `dist/technology.html`: sensor app concept, interactive roadmap and FAQs
-- `dist/about.html`: company story
+- `dist/about.html`: concise company and product background
+- `dist/papers.html`: publications area, awaiting genuine research papers
 - `dist/styles.css`: shared dark theme, white logo treatment and responsive layout
 - `dist/script.js`: navigation, keyboard-accessible tabs, quantity controls and checkout notice
 - `dist/assets/`: original supplied images, edited studio photograph and favicon
@@ -45,3 +46,5 @@ No clinical outcomes, approvals, launch dates, contact details or delivery promi
 JavaScript syntax and local asset/link checks. Browser checks cover desktop and mobile layout, image loading, navigation between pages, the roadmap and sensor tabs, quantity totals, and the checkout notice.
 
 The 3,000+ customer figure is supplied by the site owner. No customer ratings or testimonial quotes are fabricated; the reviews area shows an explicit empty state until genuine reviews are provided.
+
+The navbar contains three direct links on desktop and mobile: Papers, About, and Buy. Buy is highlighted in white. The homepage keeps only the product introduction, customer count, essential features, and reviews area. No research publications have been fabricated.

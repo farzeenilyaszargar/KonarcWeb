@@ -1,11 +1,3 @@
-const menu = document.querySelector('.menu-button');
-const navigation = document.querySelector('#navigation');
-function closeMenu() { menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-label', 'Open navigation'); navigation.classList.remove('open'); }
-menu.addEventListener('click', () => { const open = menu.getAttribute('aria-expanded') !== 'true'; menu.setAttribute('aria-expanded', String(open)); menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation'); navigation.classList.toggle('open', open); });
-navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
-document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') { closeMenu(); menu.focus(); } });
-window.matchMedia('(min-width: 701px)').addEventListener('change', closeMenu);
-
 const products = {
   brace: '<div><span class="roadmap-label">THE FOUNDATION</span><h3>Better support starts<br>with thoughtful mechanics.</h3></div><div><p>Our first knee sleeve focuses on mechanical support, with adjustable screws and a wearable design. It’s the starting point for the Konarc product journey.</p><ul><li>Adjustable mechanical support</li><li>A sleeve designed for everyday wear</li><li>A foundation for connected technology</li></ul></div>',
   tens: '<div><span class="roadmap-label">THE NEXT CHAPTER · PLANNED</span><h3>Physical support.<br>A new layer of technology.</h3></div><div><p>Our future product aims to integrate TENS — transcutaneous electrical nerve stimulation — into the knee sleeve. This is a development direction focused on exploring pain management alongside mechanical support.</p><ul><li>TENS integration planned for a future product</li><li>Mechanical support and connected sensors</li><li>Clinical validation and final features to be established</li></ul></div>'
