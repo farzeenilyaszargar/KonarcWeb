@@ -1,0 +1,11 @@
+{
+  "name": "konarc-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Konarc knee support and connected care website",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "check": "node --check dist/script.js && node --check scripts/serve.mjs"
+  }
+}
