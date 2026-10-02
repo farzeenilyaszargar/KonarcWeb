@@ -92,3 +92,28 @@
 .tab-status{background:none;padding:0}
 .roadmap-panel{margin-top:20px;border-radius:20px}
 @media(max-width:700px){.roadmap-tabs button{padding:13px 16px}.hero-copy{bottom:100px}}
+
+/* Compact navigation stays available while the page scrolls. */
+:root{--nav-height:64px}
+.header,.home-page .header{
+ position:fixed;
+ inset:0 0 auto;
+ height:var(--nav-height);
+ z-index:100;
+ border:0;
+ background:rgba(0,0,0,.58);
+ backdrop-filter:blur(16px);
+ -webkit-backdrop-filter:blur(16px);
+}
+.inner-page{padding-top:var(--nav-height)}
+.header .brand{font-size:25px}
+.header nav .buy-nav{padding:7px 22px}
+html{scroll-padding-top:calc(var(--nav-height) + 20px)}
+@media(max-width:700px){
+ :root{--nav-height:58px}
+ .header nav .buy-nav{padding:6px 15px}
+}
+@media(max-width:400px){
+ .header .brand{font-size:21px}
+ .header nav .buy-nav{padding:6px 12px}
+}
