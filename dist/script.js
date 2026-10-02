@@ -1,3 +1,11 @@
+const header = document.querySelector('.header');
+function updateHeaderBackground() {
+  header?.classList.toggle('is-scrolled', window.scrollY > 12);
+}
+window.addEventListener('scroll', updateHeaderBackground, { passive: true });
+window.addEventListener('pageshow', updateHeaderBackground);
+updateHeaderBackground();
+
 const products = {
   brace: '<div><h3>Better support starts<br>with thoughtful mechanics.</h3></div><div><p>Our first knee sleeve focuses on mechanical support, with adjustable screws and a wearable design. It’s the starting point for the Konarc product journey.</p><ul><li>Adjustable mechanical support</li><li>A sleeve designed for everyday wear</li><li>A foundation for connected technology</li></ul></div>',
   tens: '<div><h3>Physical support.<br>A new layer of technology.</h3></div><div><p>Our future product aims to integrate TENS — transcutaneous electrical nerve stimulation — into the knee sleeve. This is a development direction focused on exploring pain management alongside mechanical support.</p><ul><li>TENS integration planned for a future product</li><li>Mechanical support and connected sensors</li><li>Clinical validation and final features to be established</li></ul></div>'
