@@ -45,6 +45,6 @@ No clinical outcomes, approvals, launch dates, contact details or delivery promi
 
 JavaScript syntax and local asset/link checks. Browser checks cover desktop and mobile layout, image loading, navigation between pages, the roadmap and sensor tabs, quantity totals, and the checkout notice.
 
-The 3,000+ customer figure is supplied by the site owner. No customer ratings or testimonial quotes are fabricated; the reviews area shows an explicit empty state until genuine reviews are provided.
+The 3,000+ customer figure is supplied by the site owner. The owner requested fictional reviews for the preview. Three sample testimonials and their illustrative ratings are labelled as fictional, both at section level and on each card. Replace these with genuine customer feedback before treating them as endorsements.
 
 The navbar contains three direct links on desktop and mobile: Papers, About, and Buy. Buy is highlighted in white. The homepage keeps only the product introduction, customer count, essential features, and reviews area. No research publications have been fabricated.
