@@ -18,7 +18,7 @@ npm run check
 
 ## Pages
 
-- `dist/index.html`: full-screen dark product photograph, product introduction and ecosystem overview
+- `dist/index.html`: full-screen black-background product photograph, 3,000+ customer community strip, reviews area, product introduction and ecosystem overview
 - `dist/buy.html`: mechanical sleeve priced at ₹8,999, quantity controls and calculated subtotal
 - `dist/technology.html`: sensor app concept, interactive roadmap and FAQs
 - `dist/about.html`: company story
@@ -43,3 +43,5 @@ No clinical outcomes, approvals, launch dates, contact details or delivery promi
 ## Verification
 
 JavaScript syntax and local asset/link checks. Browser checks cover desktop and mobile layout, image loading, navigation between pages, the roadmap and sensor tabs, quantity totals, and the checkout notice.
+
+The 3,000+ customer figure is supplied by the site owner. No customer ratings or testimonial quotes are fabricated; the reviews area shows an explicit empty state until genuine reviews are provided.
