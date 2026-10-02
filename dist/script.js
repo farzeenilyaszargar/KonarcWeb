@@ -17,6 +17,7 @@ const appViews = {
 function setupTabs(selector, panelId, attribute, content) {
   const tabs = [...document.querySelectorAll(selector)];
   const panel = document.getElementById(panelId);
+  if (!panel || !tabs.length) return;
   function activate(tab) { tabs.forEach(item => { const selected = item === tab; item.setAttribute('aria-selected', String(selected)); item.tabIndex = selected ? 0 : -1; }); panel.setAttribute('aria-labelledby', tab.id); panel.innerHTML = content[tab.dataset[attribute]]; }
   tabs.forEach((tab, index) => {
     tab.addEventListener('click', () => activate(tab));
@@ -33,3 +34,27 @@ function setupTabs(selector, panelId, attribute, content) {
 setupTabs('[data-product]', 'roadmap-panel', 'product', products);
 setupTabs('[data-app-view]', 'app-panel', 'appView', appViews);
 document.getElementById('year').textContent = new Date().getFullYear();
+
+const quantity = document.getElementById('quantity');
+if (quantity) {
+  const decrease = document.getElementById('decrease');
+  const increase = document.getElementById('increase');
+  const dialog = document.getElementById('checkout-dialog');
+  const money = value => new Intl.NumberFormat('en-IN', {style: 'currency', currency: 'INR', maximumFractionDigits: 0}).format(value);
+  function updateQuantity() {
+    const count = Math.max(1, Math.min(10, Math.round(Number(quantity.value) || 1)));
+    quantity.value = count;
+    decrease.disabled = count === 1;
+    increase.disabled = count === 10;
+    document.getElementById('subtotal').textContent = money(count * 8999);
+    document.getElementById('order-total').textContent = money(count * 8999);
+    document.getElementById('order-quantity').textContent = `${count} × Konarc sleeve${count > 1 ? 's' : ''}`;
+  }
+  decrease.addEventListener('click', () => { quantity.value = Number(quantity.value) - 1; updateQuantity(); });
+  increase.addEventListener('click', () => { quantity.value = Number(quantity.value) + 1; updateQuantity(); });
+  quantity.addEventListener('change', updateQuantity);
+  document.getElementById('checkout').addEventListener('click', () => { updateQuantity(); dialog.showModal(); });
+  document.getElementById('close-checkout').addEventListener('click', () => dialog.close());
+  document.getElementById('return-product').addEventListener('click', () => dialog.close());
+  updateQuantity();
+}
