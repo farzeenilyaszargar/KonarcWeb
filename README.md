@@ -18,7 +18,7 @@ npm run check
 
 ## Pages
 
-- `dist/index.html`: full-screen black-background product photograph, 3,000+ customer community strip, reviews area, product introduction and ecosystem overview
+- `dist/index.html`: full-screen black-background product photograph, community context within the product introduction, reviews area, product introduction and ecosystem overview
 - `dist/buy.html`: mechanical sleeve priced at ₹8,999, quantity controls and calculated subtotal
 - `dist/technology.html`: sensor app concept, interactive roadmap and FAQs
 - `dist/about.html`: sample origin story with product background
@@ -47,4 +47,4 @@ JavaScript syntax and local asset/link checks. Browser checks cover desktop and 
 
 The 3,000+ customer figure is supplied by the site owner. The owner requested fictional reviews for the preview. Three sample testimonials and their illustrative ratings are labelled as fictional, both at section level and on each card. Replace these with genuine customer feedback before treating them as endorsements.
 
-The navbar contains three direct links on desktop and mobile: Papers, About, and Buy. Buy is highlighted in white. The homepage keeps only the product introduction, customer count, essential features, and reviews area. The owner subsequently requested a sample About story and two demo paper listings. Both are visibly identified as fictional demo content, with no invented clinical results or publication links.
+The navbar contains three direct links on desktop and mobile: Papers, About, and Buy. Buy is highlighted in white. The homepage keeps only the product introduction, community context, essential features, and reviews area. The owner subsequently requested a sample About story and two demo paper listings. Both are visibly identified as fictional demo content, with no invented clinical results or publication links.
