@@ -2,10 +2,17 @@
   "name": "konarc-website",
   "version": "1.0.0",
   "private": true,
-  "description": "Konarc knee support and connected care website",
+  "description": "Konarc Dynamics \u2014 single-screen interactive 3D knee brace",
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "start": "node scripts/serve.mjs",
     "check": "node --check dist/script.js && node --check scripts/serve.mjs"
-  }
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  },
+  "type": "module"
 }
