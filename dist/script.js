@@ -17,7 +17,7 @@ function showFallback() {
   document.body.classList.add('ready');
   document.getElementById('fallback').hidden = false;
   document.getElementById('interaction-hint').textContent = 'Product preview';
-  document.getElementById('reset').hidden = true;
+  document.querySelector('.view-controls').hidden = true;
   stage.hidden = true;
 }
 try {
@@ -43,6 +43,23 @@ try {
   // A procedural industrial-design concept, not a manufacturing/CAD model.
   const brace = new THREE.Group();
   scene.add(brace);
+  // Continuous leg surface: thigh, patella region, calf, and lower shin.
+  const skinCanvas = document.createElement('canvas');
+  skinCanvas.width = skinCanvas.height = 256;
+  const skinContext = skinCanvas.getContext('2d');
+  skinContext.fillStyle = '#ab7656'; skinContext.fillRect(0,0,256,256);
+  const skinPixels = skinContext.getImageData(0,0,256,256);
+  let seed = 17;
+  for(let i=0;i<skinPixels.data.length;i+=4){seed=(seed*1664525+1013904223)>>>0;const noise=(seed/4294967296-.5)*13;skinPixels.data[i]+=noise;skinPixels.data[i+1]+=noise;skinPixels.data[i+2]+=noise;}
+  skinContext.putImageData(skinPixels,0,0);
+  const skinTexture = new THREE.CanvasTexture(skinCanvas); skinTexture.colorSpace=THREE.SRGBColorSpace;
+  const skinMaterial = new THREE.MeshStandardMaterial({map:skinTexture,color:0xe0b89b,roughness:.84,metalness:0});
+  const legProfile = [[0,-2.85],[.29,-2.85],[.31,-2.75],[.33,-2.5],[.37,-2.2],[.43,-1.9],[.47,-1.7],[.49,-1.4],[.52,-1.1],[.54,-.8],[.56,-.5],[.60,-.25],[.64,0],[.64,.25],[.63,.5],[.65,.8],[.68,1.1],[.70,1.4],[.71,1.7],[.74,2],[.78,2.3],[.81,2.6],[.82,2.8],[0,2.8]];
+  const skinPoints=[];
+  for(let i=1;i<legProfile.length;i++){const [r0,y0]=legProfile[i-1],[r1,y1]=legProfile[i];const steps=Math.max(1,Math.ceil(Math.abs(y1-y0)*18));for(let j=0;j<steps;j++){const t=j/steps;skinPoints.push(new THREE.Vector2(THREE.MathUtils.lerp(r0,r1,t),THREE.MathUtils.lerp(y0,y1,t)));}}
+  skinPoints.push(new THREE.Vector2(...legProfile.at(-1)));
+  const leg = new THREE.Mesh(new THREE.LatheGeometry(skinPoints,80),skinMaterial);leg.scale.z=.84;brace.add(leg);
+
   const textileCanvas = document.createElement('canvas');
   textileCanvas.width = textileCanvas.height = 256;
   const ctx = textileCanvas.getContext('2d');
@@ -65,9 +82,10 @@ try {
   const strapMaterial = new THREE.MeshStandardMaterial({ color: 0x161a1d, roughness: .88, bumpMap: knit, bumpScale: .012, side: THREE.DoubleSide });
   const seamMaterial = new THREE.MeshStandardMaterial({ color: 0x252c31, roughness: .9 });
   const profile = [[.51,-1.72],[.52,-1.6],[.55,-1.2],[.58,-.8],[.65,-.35],[.7,0],[.69,.35],[.7,.8],[.75,1.25],[.77,1.6],[.76,1.72]];
-  const sleeve = new THREE.Mesh(new THREE.LatheGeometry(profile.map(([r,y]) => new THREE.Vector2(r,y)), 96), fabric);
+  const sleevePoints=[];for(let i=1;i<profile.length;i++){const [r0,y0]=profile[i-1],[r1,y1]=profile[i];for(let j=0;j<8;j++)sleevePoints.push(new THREE.Vector2(THREE.MathUtils.lerp(r0,r1,j/8),THREE.MathUtils.lerp(y0,y1,j/8)));}sleevePoints.push(new THREE.Vector2(...profile.at(-1)));
+  const sleeve = new THREE.Mesh(new THREE.LatheGeometry(sleevePoints, 96), fabric);
   sleeve.scale.z = .86; brace.add(sleeve);
-  const inner = new THREE.Mesh(new THREE.LatheGeometry(profile.map(([r,y]) => new THREE.Vector2(r-.035,y)), 96), rubber);
+  const inner = new THREE.Mesh(new THREE.LatheGeometry(sleevePoints.map(p=>new THREE.Vector2(p.x-.035,p.y)),96), rubber);
   inner.scale.z = .86; brace.add(inner);
   function radius(y) {
     for(let i=1;i<profile.length;i++) if(y<=profile[i][1]) { const [r0,y0]=profile[i-1]; const [r1,y1]=profile[i]; return THREE.MathUtils.lerp(r0,r1,(y-y0)/(y1-y0)); }
@@ -127,31 +145,65 @@ try {
   }
   // A small woven front label.
   const labelCanvas=document.createElement('canvas');labelCanvas.width=512;labelCanvas.height=128;
-  const lc=labelCanvas.getContext('2d');lc.fillStyle='#161a1d';lc.fillRect(0,0,512,128);lc.fillStyle='#aeb8bf';lc.font='500 39px Arial';lc.textAlign='center';lc.fillText('konarc',256,62);lc.fillStyle='#667078';lc.font='14px Arial';lc.fillText('D Y N A M I C S',256,94);
+  const lc=labelCanvas.getContext('2d');lc.fillStyle='#161a1d';lc.fillRect(0,0,512,128);lc.fillStyle='#aeb8bf';lc.font='500 39px Arial';lc.textAlign='center';lc.fillText('konarc',256,62);
   const labelTexture=new THREE.CanvasTexture(labelCanvas);labelTexture.colorSpace=THREE.SRGBColorSpace;
   const label=new THREE.Mesh(new THREE.PlaneGeometry(.49,.123),new THREE.MeshStandardMaterial({map:labelTexture,roughness:1}));label.position.set(0,1.08,.635);label.rotation.x=-.07;brace.add(label);
+  const kneeFlex = {value:.27};
+  brace.traverse(object=>{
+    if(!object.isMesh)return;
+    object.updateMatrix();object.geometry.applyMatrix4(object.matrix);
+    object.position.set(0,0,0);object.rotation.set(0,0,0);object.scale.set(1,1,1);
+    object.frustumCulled=false;
+  });
+  const flexMaterials = new Set();brace.traverse(object=>{if(object.isMesh)flexMaterials.add(object.material);});
+  for(const material of flexMaterials){
+    material.onBeforeCompile=shader=>{
+      shader.uniforms.kneeFlex=kneeFlex;
+      shader.vertexShader='uniform float kneeFlex;\n'+shader.vertexShader;
+      shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
+        float normalBend = kneeFlex * (1.0 - smoothstep(-0.28, 0.28, position.y));
+        float nc = cos(normalBend), ns = sin(normalBend);
+        objectNormal.yz = mat2(nc, ns, -ns, nc) * objectNormal.yz;`);
+      shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+        float bend = kneeFlex * (1.0 - smoothstep(-0.28, 0.28, position.y));
+        float c = cos(bend), s = sin(bend);
+        transformed.yz = mat2(c, s, -s, c) * transformed.yz;`);
+    };
+    material.customProgramCacheKey=()=> 'konarc-knee-flex-v1';
+  }
+
   // Soft contact shadow, drawn as a lighting texture rather than product imagery.
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=128;
   const sc=shadowCanvas.getContext('2d'),gradient=sc.createRadialGradient(64,64,3,64,64,64);gradient.addColorStop(0,'rgba(0,0,0,.55)');gradient.addColorStop(1,'rgba(0,0,0,0)');sc.fillStyle=gradient;sc.fillRect(0,0,128,128);
-  const shadow=new THREE.Mesh(new THREE.PlaneGeometry(3.4,1.1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));shadow.position.set(0,-2.04,-.1);shadow.rotation.x=-.9;scene.add(shadow);
+  const shadow=new THREE.Mesh(new THREE.PlaneGeometry(3.4,1.1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));shadow.position.set(0,-2.95,-.1);shadow.rotation.x=-.9;scene.add(shadow);
 
-  let targetY=-.62,targetX=.12,currentY=targetY,currentX=targetX,dragging=false,lastX=0,lastY=0,interacted=false;
-  function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.position.z=w/h<.7?11.8:w/h<1?10.7:9.3;camera.updateProjectionMatrix();brace.position.y=w<600?.15:0;}
+  let targetY=-.85,targetX=.02,currentY=targetY,currentX=targetX,dragging=false,lastX=0,lastY=0,interacted=false;
+  function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.position.z=w/h<.7?18.5:w/h<1?16.8:14.6;camera.lookAt(0,-.2,0);camera.updateProjectionMatrix();brace.position.y=w<600?.15:0;}
   window.addEventListener('resize',resize);resize();
   stage.addEventListener('pointerdown',e=>{if(e.button!==0)return;dragging=true;interacted=true;lastX=e.clientX;lastY=e.clientY;stage.setPointerCapture(e.pointerId);});
   stage.addEventListener('pointermove',e=>{if(!dragging)return;targetY+=(e.clientX-lastX)*.008;targetX=THREE.MathUtils.clamp(targetX+(e.clientY-lastY)*.004,-.45,.45);lastX=e.clientX;lastY=e.clientY;});
   function release(){dragging=false;}
   stage.addEventListener('pointerup',release);stage.addEventListener('pointercancel',release);stage.addEventListener('lostpointercapture',release);
   stage.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home'].includes(e.key))return;e.preventDefault();interacted=true;if(e.key==='ArrowLeft')targetY-=.15;if(e.key==='ArrowRight')targetY+=.15;if(e.key==='ArrowUp')targetX=Math.max(-.45,targetX-.08);if(e.key==='ArrowDown')targetX=Math.min(.45,targetX+.08);if(e.key==='Home')reset();});
-  function reset(){targetY=-.62;targetX=.12;interacted=false;}
+  function reset(){targetY=-.85;targetX=.02;interacted=false;}
   document.getElementById('reset').addEventListener('click',reset);
-  let frame=0,start=performance.now();
+  let motionPaused=reducedMotion.matches;
+  const motionButton=document.getElementById('motion-toggle');
+  function updateMotionButton(){motionButton.setAttribute('aria-pressed',String(motionPaused));motionButton.setAttribute('aria-label',motionPaused?'Play knee movement':'Pause knee movement');motionButton.querySelector('span').textContent=motionPaused?'▷':'Ⅱ';}
+  motionButton.addEventListener('click',()=>{motionPaused=!motionPaused;updateMotionButton();});
+  reducedMotion.addEventListener('change',()=>{motionPaused=reducedMotion.matches;updateMotionButton();});
+  updateMotionButton();
+  let frame=0,lastTime=performance.now(),motionTime=0;
+
   function render(now){
-    const seconds=(now-start)/1000;
+    const elapsed=Math.min((now-lastTime)/1000,.05);lastTime=now;
     const modalOpen=Boolean(document.querySelector('dialog[open]'));
+    if(!motionPaused&&!modalOpen)motionTime+=elapsed;
+    const seconds=motionTime;
+    kneeFlex.value=.29+Math.sin(seconds*.9)*.26;
     currentY=THREE.MathUtils.lerp(currentY,targetY,reducedMotion.matches?1:.09);currentX=THREE.MathUtils.lerp(currentX,targetX,reducedMotion.matches?1:.09);
-    brace.rotation.set(currentX,currentY+(!interacted&&!reducedMotion.matches&&!modalOpen?Math.sin(seconds*.23)*.16:0),-.08);
-    if(!reducedMotion.matches&&!modalOpen)brace.position.y=(stage.clientWidth<600?.15:0)+Math.sin(seconds*.8)*.035;
+    brace.rotation.set(currentX,currentY+(!interacted&&!motionPaused&&!modalOpen?Math.sin(seconds*.23)*.16:0),-.08);
+    if(!motionPaused&&!modalOpen)brace.position.y=(stage.clientWidth<600?.15:0)+Math.sin(seconds*.8)*.035;
     renderer.render(scene,camera);
     document.body.classList.add('ready');
     frame=requestAnimationFrame(render);

@@ -2,7 +2,7 @@
   "name": "konarc-website",
   "version": "1.0.0",
   "private": true,
-  "description": "Konarc Dynamics \u2014 single-screen interactive 3D knee brace",
+  "description": "Konarc \u2014 single-screen interactive 3D knee brace",
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "start": "node scripts/serve.mjs",

@@ -1,6 +1,6 @@
-# Konarc Dynamics
+# Konarc
 
-A one-viewport product experience built with Three.js. The entire homepage is an interactive, procedurally modelled knee brace, with restrained branding, an About overlay, and a bottom preorder button. There are no scrolling marketing sections.
+A one-viewport product experience built with Three.js. The entire homepage is an interactive, procedurally modelled leg wearing a knee brace, with restrained branding, an About overlay, and a bottom preorder button. There are no scrolling marketing sections.
 
 ## Preview
 
@@ -27,7 +27,7 @@ Old About, Papers, Technology and Buy URLs redirect into the new experience. The
 
 ## Interaction
 
-Drag to rotate the brace, or focus the scene and use the arrow keys. Home or Reset view restores the starting orientation. Ambient motion respects reduced-motion settings. Animation pauses when the document is hidden. About and preorder dialogs support keyboard navigation and Escape dismissal.
+Drag to rotate the brace, or focus the scene and use the arrow keys. Home or Reset view restores the starting orientation. The knee and brace flex together through a shared deformation shader. A pause/play control stops the movement. Ambient motion respects reduced-motion settings. Animation pauses when the document is hidden. About and preorder dialogs support keyboard navigation and Escape dismissal.
 
 The model is an illustrative industrial-design concept built in code, not a verified CAD model or exact manufacturing geometry. Product materials, fit and mechanical specifications must be confirmed against the real product.
 
@@ -40,3 +40,5 @@ npm run check
 ```
 
 Browser verification includes WebGL rendering, desktop/mobile sizing without overflow, drag and keyboard input, modal open/close behavior, legacy routes, reduced motion, and the WebGL-unavailable fallback. Playwright is a development dependency only.
+
+About describes Ankush and Panda’s purpose for building knee support. The background uses subtle orbital contours, warm/cool lighting, and a perspective grid.
